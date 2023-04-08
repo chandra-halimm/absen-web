@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userModels = require("../models/user");
+const bcrypt = require("bcrypt");
 //routing endpoint user pertama
 
 router.get("/", async (req, res) => {
@@ -16,10 +17,13 @@ router.post("/", async (req, res) => {
   const nip = req.body.nip;
   const nama = req.body.nama;
   const password = req.body.password;
+
+  const encryptedPassword = await bcrypt.hash(password, 10);
+
   const users = await userModels.create({
     nip,
     nama,
-    password,
+    password: encryptedPassword,
   });
 
   res.status(200).json({
@@ -32,30 +36,26 @@ router.put("/", async (req, res) => {
   const { nip, nama, password, passwordBaru } = req.body;
 
   const userData = await userModels.findOne({ where: { nip: nip } });
+  const compare = await bcrypt.compare(password, userData.password);
+  const encryptedPassword = await bcrypt.hash(passwordBaru, 10);
 
-  console.log(userData);
-
-  if (userData.password === password) {
+  if (compare === true) {
     const users = await userModels.update(
       {
         nama,
-        password: passwordBaru,
+        password: encryptedPassword,
       },
       { where: { nip: nip } }
     );
-    res.json({
-      users,
+    res.status(200).json({
+      data: { updated: users },
+      metadata: "update data success",
     });
   } else {
-    res.json({
+    res.status(400).json({
       error: "data invalid",
     });
   }
-
-  // res.status(200).json({
-  //   data: users,
-  //   metadata: "okok",
-  // });
 });
 
 module.exports = router;

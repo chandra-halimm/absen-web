@@ -8,13 +8,13 @@ sequelize.sync().then(() => {
 });
 
 const userEndpoint = require("./routes/user");
-const adminEndpoint = require("./routes/admin");
+const absensiEndpoint = require("./routes/absensi");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use("/users", userEndpoint);
-app.use("/admin", adminEndpoint);
+app.use("/absensi", absensiEndpoint);
 
 app.listen(port, () => console.log(`running server on port : ${port}`));
