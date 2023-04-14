@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userModels = require("../models/user");
 const bcrypt = require("bcrypt");
+const passwordCheck = require("../utils/passwordCheck");
 //routing endpoint user pertama
 
 router.get("/", async (req, res) => {
@@ -35,11 +36,11 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
   const { nip, nama, password, passwordBaru } = req.body;
 
-  const userData = await userModels.findOne({ where: { nip: nip } });
-  const compare = await bcrypt.compare(password, userData.password);
+  const check = await passwordCheck(nip, password);
+
   const encryptedPassword = await bcrypt.hash(passwordBaru, 10);
 
-  if (compare === true) {
+  if (check.compare === true) {
     const users = await userModels.update(
       {
         nama,
@@ -54,6 +55,21 @@ router.put("/", async (req, res) => {
   } else {
     res.status(400).json({
       error: "data invalid",
+    });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const { nip, password } = req.body;
+  const check = await passwordCheck(nip, password);
+  if (check.compare === true) {
+    res.status(200).json({
+      data: check.usersData,
+      metadata: "login success",
+    });
+  } else {
+    res.status(400).json({
+      error: "login gagal  ",
     });
   }
 });
