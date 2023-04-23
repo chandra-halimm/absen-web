@@ -3,22 +3,31 @@ import { Container, Form, Button } from "react-bootstrap";
 import ReactTypingEffect from "react-typing-effect";
 import axios from "axios";
 
-function Login({ title, description }) {
+const Login = ({ title, description }) => {
   const [NIP, setNIP] = useState("");
   const [password, setPassword] = useState("");
   const handleNIP = (inputNIP) => {
-    console.log(inputNIP);
     setNIP(inputNIP);
   };
   const handlePassword = (inputPassword) => {
-    console.log(inputPassword);
     setPassword(inputPassword);
   };
 
   const userLogin = () => {
-    console.log("userlogin ready");
+    //nip : 112233 password: 123
     console.log(`nip: ${NIP}`);
     console.log(`password: ${password}`);
+    const requestingData = {
+      nip: NIP,
+      password: password,
+    };
+    axios({
+      method: "POST",
+      url: "http://localhost:3300/users/login",
+      data: requestingData,
+    }).then((result) => {
+      console.log("test endpoint : ", result.data);
+    });
   };
   return (
     <Container>
@@ -65,6 +74,6 @@ function Login({ title, description }) {
       </Form>
     </Container>
   );
-}
+};
 
 export default Login;
