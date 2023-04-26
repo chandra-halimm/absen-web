@@ -6,7 +6,7 @@ router.get("/", async (req, res) => {
   const absensi = await absensiModels.findAll();
 
   res.status(200).json({
-    data: absensi,
+    absensi,
     metadata: "test absensi endpoint",
   });
 });
@@ -26,12 +26,12 @@ router.post("/checkin", async (req, res) => {
 router.post("/checkout", async (req, res) => {
   const { nip } = req.body;
   const absensi = await absensiModels.create({
-    users_nip: nip,
+    nip,
     status: "out",
   });
   res.status(200).json({
     data: absensi,
-    metadata: "checkout gagal",
+    metadata: "checkout Berhasil",
   });
 });
 

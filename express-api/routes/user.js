@@ -60,12 +60,12 @@ router.put("/", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  const { nip, password } = req.body;
   try {
-    const { nip, password } = req.body;
     const check = await passwordCheck(nip, password);
     if (check.compare === true) {
       res.status(200).json({
-        data: check.usersData,
+        users: check.userData,
         metadata: "login success",
       });
     } else {
@@ -76,7 +76,7 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "server internal error",
+      err: "server internal error",
     });
   }
 });

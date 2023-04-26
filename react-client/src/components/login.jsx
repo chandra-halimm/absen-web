@@ -15,8 +15,6 @@ const Login = ({ title, description }) => {
 
   const userLogin = () => {
     //nip : 112233 password: 123
-    console.log(`nip: ${NIP}`);
-    console.log(`password: ${password}`);
     const requestingData = {
       nip: NIP,
       password: password,
@@ -26,7 +24,9 @@ const Login = ({ title, description }) => {
       url: "http://localhost:3300/users/login",
       data: requestingData,
     }).then((result) => {
-      console.log("test endpoint : ", result.data);
+      localStorage.setItem("nip", result.data.users.nip);
+      localStorage.setItem("nama", result.data.users.nama);
+      window.location.replace("/dashboard");
     });
   };
   return (
