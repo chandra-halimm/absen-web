@@ -19,42 +19,62 @@ router.post("/", async (req, res) => {
   const nama = req.body.nama;
   const password = req.body.password;
 
-  const encryptedPassword = await bcrypt.hash(password, 10);
+  try {
+    const encryptedPassword = await bcrypt.hash(password, 10);
 
-  const users = await userModels.create({
-    nip,
-    nama,
-    password: encryptedPassword,
-  });
+    const users = await userModels.create({
+      nip,
+      nama,
+      password: encryptedPassword,
+    });
 
-  res.status(200).json({
-    data: users,
-    metadata: "okok",
-  });
+    if (!users) {
+      res.status(400).json({
+        message: "error",
+      });
+    } else {
+      res.status(200).json({
+        registered: users,
+        metadata: "okok",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: "internal server error",
+    });
+  }
 });
 
 router.put("/", async (req, res) => {
   const { nip, nama, password, passwordBaru } = req.body;
 
-  const check = await passwordCheck(nip, password);
+  try {
+    const check = await passwordCheck(nip, password);
 
-  const encryptedPassword = await bcrypt.hash(passwordBaru, 10);
+    const encryptedPassword = await bcrypt.hash(passwordBaru, 10);
 
-  if (check.compare === true) {
-    const users = await userModels.update(
-      {
-        nama,
-        password: encryptedPassword,
-      },
-      { where: { nip: nip } }
-    );
-    res.status(200).json({
-      data: { updated: users },
-      metadata: "update data success",
-    });
-  } else {
-    res.status(400).json({
-      error: "data invalid",
+    if (check.compare === true) {
+      const users = await userModels.update(
+        {
+          nama,
+          password: encryptedPassword,
+        },
+        { where: { nip: nip } }
+      );
+      res.status(200).json({
+        data: { updated: users },
+        metadata: "update data success",
+      });
+    } else {
+      res.status(400).json({
+        error: "data invalid",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "server internal error",
     });
   }
 });
