@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Fira Sans", sans-serif;
+}
+
+.card {
+  width: 50%;
+  background-color: #093372 !important;
+  height: 220px;
+  padding: 15px 15px;
+  border: none;
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}

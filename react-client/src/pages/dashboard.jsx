@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, Badge, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Navbar from "../components/header-navbar";
+import "../style/dashboardStyle.css";
 
 const Dashboard = () => {
   const [absensiList, setAbsensiList] = useState([]);
@@ -84,39 +85,36 @@ const Dashboard = () => {
     <Container>
       <main className="col-md-9 ms-sm-auto col-lg-12 px-md-4">
         <Navbar />
-        <div className="">
-          <Row>
-            <Col></Col>
-          </Row>
-          <Row className="mt-5">
-            <Col>
-              <p>Date And Time</p>
-              <h3>{today}</h3>
-            </Col>
-            <Col className="mt-5">
-              <h3>{hours}</h3>
-            </Col>
-            <hr />
-          </Row>
-
-          <Row className="mt-3">
+        <div className="d-flex justify-content-between">
+          <Row className="card">
             <Col>
               <p>Name :</p>
               <h3>{localStorage.getItem("nama")}</h3>
             </Col>
+            <hr />
             <Col>
               <p>Nip :</p>
               <h3>{localStorage.getItem("nip")}</h3>
             </Col>
-            <hr />
           </Row>
 
-          <Row className="my-3">
+          <Row className="card">
             <Col>
-              <h4>Status</h4>
+              <p>Date</p>
+              <h3>{today}</h3>
+              <hr />
+              <p>time</p>
+              <h3 className="mt-3">{hours}</h3>
             </Col>
+            <Col></Col>
           </Row>
         </div>
+
+        <Row className="my-3">
+          <Col>
+            <h4>Status</h4>
+          </Col>
+        </Row>
 
         <Badge
           pill
