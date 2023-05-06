@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Container, Badge } from "react-bootstrap";
+import { Container, Badge, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import Navbar from "./navbar";
+import Navbar from "../components/header-navbar";
 
-const Dashboard = ({ title }) => {
+const Dashboard = () => {
   const [absensiList, setAbsensiList] = useState([]);
   const [absenNotif, setAbsenNotif] = useState(false);
   const [lastCheckin, setLastCheckin] = useState(
@@ -15,7 +15,7 @@ const Dashboard = ({ title }) => {
 
   useEffect(() => {
     if (!localStorage.getItem("nip") && !localStorage.getItem("name")) {
-      window.location.replace("/login");
+      window.location.replace("/");
     }
     axios({
       method: "GET",
@@ -52,8 +52,6 @@ const Dashboard = ({ title }) => {
     }
   };
   const attendanceCheckOut = (params) => {
-    const today = new Date().toLocaleDateString();
-
     if (lastCheckOut === today) {
       alert(`Anda sudah ${params} hari ini!`);
     } else {
@@ -78,11 +76,68 @@ const Dashboard = ({ title }) => {
     }
   };
 
+  const date = new Date();
+  const today = date.toLocaleDateString();
+  const hours = `${date.getHours()} : ${date.getMinutes()}`;
+
   return (
     <Container>
       <main className="col-md-9 ms-sm-auto col-lg-12 px-md-4">
         <Navbar />
-        <h2>{title}</h2>
+        <div className="">
+          <Row>
+            <Col></Col>
+          </Row>
+          <Row className="mt-5">
+            <Col>
+              <p>Date And Time</p>
+              <h3>{today}</h3>
+            </Col>
+            <Col className="mt-5">
+              <h3>{hours}</h3>
+            </Col>
+            <hr />
+          </Row>
+
+          <Row className="mt-3">
+            <Col>
+              <p>Name :</p>
+              <h3>{localStorage.getItem("nama")}</h3>
+            </Col>
+            <Col>
+              <p>Nip :</p>
+              <h3>{localStorage.getItem("nip")}</h3>
+            </Col>
+            <hr />
+          </Row>
+
+          <Row className="my-3">
+            <Col>
+              <h4>Status</h4>
+            </Col>
+          </Row>
+        </div>
+
+        <Badge
+          pill
+          bg="primary"
+          className="me-4 py-2"
+          style={{ cursor: "pointer" }}
+          onClick={() => attendanceCheckIn("checkin")}
+        >
+          Checkin
+        </Badge>
+        <Badge
+          size="lg"
+          pill
+          bg="danger"
+          className="py-2"
+          style={{ cursor: "pointer" }}
+          onClick={() => attendanceCheckOut("checkout")}
+        >
+          Checkout
+        </Badge>
+
         <div className="table-responsive">
           <table className="table table-striped table-sm">
             <thead>
@@ -112,27 +167,7 @@ const Dashboard = ({ title }) => {
               })}
             </tbody>
           </table>
-          <div>
-            <Badge
-              pill
-              bg="primary"
-              className="me-4 py-2"
-              style={{ cursor: "pointer" }}
-              onClick={() => attendanceCheckIn("checkin")}
-            >
-              Checkin
-            </Badge>
-            <Badge
-              size="lg"
-              pill
-              bg="danger"
-              className="py-2"
-              style={{ cursor: "pointer" }}
-              onClick={() => attendanceCheckOut("checkout")}
-            >
-              Checkout
-            </Badge>
-          </div>
+          <div></div>
         </div>
       </main>
     </Container>

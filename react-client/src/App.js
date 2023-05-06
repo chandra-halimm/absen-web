@@ -1,9 +1,10 @@
-import Login from "./components/login";
-import Home from "./components/home";
-import Dashboard from "./components/dashboard/";
-import Edit from "./components/edit";
+import Login from "./pages/login";
+import Home from "./pages/home";
+import Dashboard from "./pages/dashboard";
+import Edit from "./pages/edit";
+import Register from "./pages/register";
+import ErrorFound from "./pages/errornotfound";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Register from "./components/register";
 
 function App() {
   return (
@@ -30,7 +31,10 @@ function App() {
           element={<Dashboard title="Dashboard Page" />}
         />
         <Route path="/" element={<Home title="Page Not Found" />} />
-        <Route path="*" element={<h1>Page Not Found Yaya</h1>} />
+        <Route
+          path="*"
+          element={<ErrorFound>Page Not Found Yaya</ErrorFound>}
+        />
       </Routes>
     </Router>
   );

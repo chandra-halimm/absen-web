@@ -3,41 +3,34 @@ import { Container, Form, Button } from "react-bootstrap";
 import ReactTypingEffect from "react-typing-effect";
 import axios from "axios";
 
-const Register = ({ title, description }) => {
-  const [nip, setNIP] = useState("");
-  const [nama, setNama] = useState("");
+const Login = ({ title, description }) => {
+  const [NIP, setNIP] = useState("");
   const [password, setPassword] = useState("");
-
   const handleNIP = (inputNIP) => {
     setNIP(inputNIP);
-  };
-  const handleNama = (inputNama) => {
-    setNama(inputNama);
   };
   const handlePassword = (inputPassword) => {
     setPassword(inputPassword);
   };
 
-  const userRegister = () => {
+  const userLogin = () => {
+    //nip : 112233 password: 123
     const requestingData = {
-      nip: nip,
-      nama: nama,
+      nip: NIP,
       password: password,
     };
     axios({
       method: "POST",
-      url: "http://localhost:3300/users",
+      url: "http://localhost:3300/users/login",
       data: requestingData,
     })
       .then((result) => {
-        console.log(result.data);
-        if (result.data.registered) {
-          alert("Pendaftaran Berhasil");
-          window.location.replace("/login");
-        }
+        localStorage.setItem("nip", result.data.users.nip);
+        localStorage.setItem("nama", result.data.users.nama);
+        window.location.replace("/dashboard");
       })
       .catch(() => {
-        alert("Gagal Mendaftar");
+        alert("Password Salah");
       });
   };
   return (
@@ -52,34 +45,14 @@ const Register = ({ title, description }) => {
         />
       </div>
       <Form className="w-50 mx-auto">
-        <Button
-          size="sm"
-          className="mb-3 px-4"
-          onClick={() => {
-            window.location.replace("./login");
-          }}
-        >
-          Back
-        </Button>
         <Form.Group>
           <Form.Label className="fw-bold">NIP</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             placeholder="masukan nip anda"
             required
             onChange={(event) => {
               handleNIP(event.target.value);
-            }}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label className="fw-bold">Nama</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="*******"
-            required
-            onChange={(event) => {
-              handleNama(event.target.value);
             }}
           />
         </Form.Group>
@@ -95,9 +68,9 @@ const Register = ({ title, description }) => {
           />
         </Form.Group>
         <Button
-          className="w-100 my-4"
+          className="w-100 mt-4 mb-3"
           onClick={() => {
-            userRegister();
+            userLogin();
           }}
         >
           Log In
@@ -107,4 +80,4 @@ const Register = ({ title, description }) => {
   );
 };
 
-export default Register;
+export default Login;
